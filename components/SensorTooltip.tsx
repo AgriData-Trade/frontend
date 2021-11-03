@@ -2,6 +2,7 @@ import { Sensor } from '../types/Sensor'
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import { getOptions, color } from 'highcharts'
+import useSWR from 'swr'
 
 
 interface Props {
@@ -9,18 +10,15 @@ interface Props {
     location: [number, number]
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const SensorTooltip = (props: Props) => {
     const { sensor, location } = props;
+    //http://localhost:3000/api/data/${sensor.id}
+    const { data, error } = useSWR("https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json", fetcher)
 
-    const getData = async (sensor: Sensor) => {
-        // const resonse = await fetch(`http://localhost:3000/api/data/${sensor.id}`);
-        const response = await fetch("https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json");
-        const data = await response.json();
-        console.log(data)
-        return data;
-    }
-
-    const data = getData(sensor);
+    if (error) return "An error has occurred.";
+    if (!data) return "Loading...";
 
     const chartOptions = {
         title: {
