@@ -17,8 +17,8 @@ const SensorTooltip = (props: Props) => {
     //http://localhost:3000/api/data/${sensor.id}
     const { data, error } = useSWR("https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/usdeur.json", fetcher)
 
-    if (error) return "An error has occurred.";
-    if (!data) return "Loading...";
+    if (error) return (<>An error has occurred.</>);
+    if (!data) return (<>Loading...</>);
 
     const chartOptions = {
         title: {

@@ -25,8 +25,9 @@ function getCenter(sensors: Sensor[]): [number, number] {
 }
 
 export async function getStaticProps(): Promise<{ props: Props }> {
-    const response = await fetch('http://localhost:3000/api/sensors')
-    const sensors = await response.json()
+    // const response = await fetch('http://localhost:3000/api/sensors')
+    // const sensors = await response.json()
+    const sensors = [{ name: "TestBed", id: "1", lat: -41.314220, lng: 174.822680 }, { name: "Vic Uni", id: "2", lat: -41.289840, lng: 174.769120 }];
     return {
         props: {
             sensors,
