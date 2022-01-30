@@ -1,34 +1,33 @@
 import { MapContainer, TileLayer, CircleMarker } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-markercluster/dist/styles.min.css";
-import { Sensor } from '../types/Sensor'
+import { Node } from '../types/Node'
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import SensorTooltip from './SensorTooltip';
 import { useState } from 'react';
 
 interface Props {
-    sensors: Sensor[]
+    nodes: Node[]
     center: [number, number]
 }
 
 interface Active {
-    sensor: Sensor
+    node: Node
     center: [number, number]
     active: boolean
 }
 
 const Map = (props: Props) => {
     const active: Active = {
-        sensor: {
-            name: "",
+        node: {
+            nodeName: "",
             id: "",
-            lat: 0,
-            lng: 0
+            location: 0
         },
         center: [0, 0],
         active: false
     }
-    const [activeSensor, setActiveSensor] = useState(active);
+    const [activeNode, setActiveNode] = useState(active);
 
     return (
         <MapContainer center={props.center} zoom={13} minZoom={3} style={{ width: "100%", position: "absolute", height: 700, bottom: 0, zIndex: 500, }}
@@ -41,16 +40,15 @@ const Map = (props: Props) => {
             />
             <MarkerClusterGroup animate={true}>
                 {
-                    props.sensors.map(sensor => {
+                    props.nodes.map(node => {
                         return (
-                            <CircleMarker key={sensor.id} center={[sensor.lat, sensor.lng]} opacity={1}
+                            <CircleMarker key={node.id} center={[node.location, node.location]} opacity={1}
                                 radius={30}
                                 weight={1}
                                 eventHandlers={{
                                     click: () => {
-                                        setActiveSensor({ sensor: sensor, center: [sensor.lat, sensor.lng], active: false });
-                                        setActiveSensor({ sensor: sensor, center: [sensor.lat, sensor.lng], active: true });
-                                        console.log(1);
+                                        setActiveNode({ node: node, center: [node.location, node.location], active: false });
+                                        setActiveNode({ node: node, center: [node.location, node.location], active: true });
                                     },
 
                                 }}
@@ -60,10 +58,9 @@ const Map = (props: Props) => {
                     })
                 }
             </MarkerClusterGroup>
-            {activeSensor.active &&
+            {activeNode.active &&
                 <SensorTooltip
-                    sensor={activeSensor.sensor}
-                    location={activeSensor.center}
+                    node={activeNode.node}
                 />
             }
         </MapContainer >
